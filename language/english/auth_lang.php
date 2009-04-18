@@ -1,4 +1,16 @@
 <?php
+/**
+* Authentication Library
+*
+* @package Authentication
+* @category Libraries
+* @author Adam Griffiths
+* @link http://programmersvoice.com
+* @version 1.0.4
+* @copyright Adam Griffiths 2009
+*
+* Auth provides a powerful, lightweight and simple interface for user authentication 
+*/
 
 $lang['insufficient_privs'] = "You do not have sufficient privileges to access this page.";
 $lang['username_callback_error'] = "The username was not found in our database.";

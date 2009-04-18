@@ -1,4 +1,16 @@
 <?php
+/**
+* Authentication Library
+*
+* @package Authentication
+* @category Libraries
+* @author Adam Griffiths
+* @link http://programmersvoice.com
+* @version 1.0.4
+* @copyright Adam Griffiths 2009
+*
+* Auth provides a powerful, lightweight and simple interface for user authentication 
+*/
 
 class Admin extends Application
 {
