@@ -1,9 +1,9 @@
 <?php
 ob_start();
 /**
-* Authentication Library
+* The Authentication Library
 *
-* @package Authentication
+* @package The Authentication Library
 * @category Libraries
 * @author Adam Griffiths
 * @link http://programmersvoice.com
@@ -43,7 +43,7 @@ class Auth
 		}
 		else
 		{
-			if(!isset($_COOKIE['login_attempts']))
+			if(!array_key_exists('login_attempts', $_COOKIE))
 			{
 				setcookie("login_attempts", 0, time()+900, '/');
 			}
@@ -62,30 +62,24 @@ class Auth
 	*/
 	function restrict($group = NULL, $single = NULL)
 	{
-		echo("1<br />");
 		if($group === NULL)
 		{
-			echo("1.1<br />");
-			if($this->CI->session->userdata('logged_in') == TRUE)
+			if($this->logged_in() == TRUE)
 			{
-				echo("1.2<br />");
 				return TRUE;
 			}
 			else
 			{
-				echo("1.3<br />");
 				show_error($this->CI->lang->line('insufficient_privs'));
 			}
 		}
 		elseif($this->logged_in() == TRUE)
 		{
-			echo("2<br />");
 			$level = $this->config['auth_groups'][$group];
 			$user_level = $this->CI->session->userdata('group');
 			
 			if($user_level > $level OR $single == TRUE && $user_level !== $level)
 			{
-				echo("2.1<br />");
 				show_error($this->CI->lang->line('insufficient_privs'));
 			}
 			
@@ -93,7 +87,6 @@ class Auth
 		}
 		else
 		{
-			echo("3<br />");
 			redirect($this->config['auth_login'], 'refresh');
 		}
 	} // function restrict()
@@ -109,6 +102,12 @@ class Auth
 	*/
 	function login($redirect = NULL)
 	{
+		if($redirect === NULL)
+		{
+			$redirect = $this->config['auth_login'];
+		}
+
+			
 		$this->CI->form_validation->set_rules('username', 'Username', 'trim|required|min_length[4]|max_length[40]|callback_username_check');
 		$this->CI->form_validation->set_rules('password', 'Password', 'trim|required|min_length[4]|max_length[12]');
 		$this->CI->form_validation->set_rules('remember', 'Remember Me');
@@ -121,7 +120,7 @@ class Auth
 			}
 			else
 			{
-				$this->CI->load->view('auth/login');
+				$this->view('login');
 			}
 		}
 		else
@@ -130,12 +129,12 @@ class Auth
 			$auth_type = $this->_auth_type($username);
 			$password = $this->_salt(set_value('password'));
 			$email = set_value('email');
-			
+
 			if(!$this->_verify_details($auth_type, $username, $password))
 			{
 				show_error($this->CI->lang->line('login_details_error'));
 			}
-			
+
 			$userdata = $this->CI->db->query("SELECT * FROM `users` WHERE `$auth_type` = '$username'");
 			$row = $userdata->row_array();
 			
@@ -143,16 +142,16 @@ class Auth
 						$auth_type => $username,
 						'username' => $row['username'],
 						'user_id' => $row['id'],
-						'group' => $row['group_id'],
+						'group_id' => $row['group_id'],
 						'logged_in' => TRUE
 						);
 			$this->CI->session->set_userdata($data);
-			
+
 			if($this->config['auth_remember'] === TRUE)
 			{
 				$this->_generate();
 			}
-			
+
 			redirect($redirect);
 		}
 	} // function login()
@@ -166,7 +165,7 @@ class Auth
 	function logout()
 	{
 		$this->CI->session->sess_destroy();
-		$this->CI->load->view('auth/logout');
+		$this->view('logout');
 	} // function logout()
 	
 	
@@ -176,18 +175,37 @@ class Auth
 	* Register a user and redirect them to the success page
 	*
 	* @access public
-	* @param string
+	* @param bool whether or not the user should be logged in once account is created, used in admin panel
+	* @param bool whether or not the user is simply being edited, used in admin panel
+	* @param string the user ID to be edited, used in the admin panel
 	*/
-	function register()
+	function register($login = TRUE, $edit = FALSE, $id = NULL)
 	{
-		$this->CI->form_validation->set_rules('username', 'Username', 'trim|required|min_length[4]|max_length[40]|callback_reg_username_check');
-		$this->CI->form_validation->set_rules('password', 'Password', 'trim|required|min_length[4]|max_length[12]|matches[conf_password]');
-		$this->CI->form_validation->set_rules('conf_password', 'Password confirmation', 'trim|required|min_length[4]|max_length[12]|matches[password]');
-		$this->CI->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback_reg_email_check');
+		if($edit === TRUE)
+		{
+			$this->CI->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback_reg_email_check');
+		}
+		else
+		{
+			$this->CI->form_validation->set_rules('username', 'Username', 'trim|required|min_length[4]|max_length[40]|callback_reg_username_check');
+			$this->CI->form_validation->set_rules('password', 'Password', 'trim|required|min_length[4]|max_length[12]|matches[conf_password]');
+			$this->CI->form_validation->set_rules('conf_password', 'Password confirmation', 'trim|required|min_length[4]|max_length[12]|matches[password]');
+			$this->CI->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback_reg_email_check');
+		}
 		
 		if($this->CI->form_validation->run() == FALSE)
 		{
-			$this->CI->load->view('auth/register');
+			if($edit === TRUE)
+			{
+				$query = $this->CI->db->query("SELECT * FROM `users` WHERE `id` = '$id'");
+				$result = $query->result_array();
+				
+				$this->view('register', $result[0]);
+			}
+			else
+			{
+				$this->view('register');
+			}
 		}
 		else
 		{
@@ -196,25 +214,39 @@ class Auth
 			$password = $this->_salt(set_value('password'));
 			$email = set_value('email');
 			
-			$this->CI->db->query("INSERT INTO `users` (username, email, password) VALUES ('$username', '$email', '$password')");
+			if($edit === TRUE)
+			{
+				$this->CI->db->query("UPDATE `users` SET `email` = '$email' WHERE `id` = '$id'");
+				$data['msg'] = "The user has now been edited.";
+			}
+			else
+			{
+				$this->CI->db->query("INSERT INTO `users` (username, email, password) VALUES ('$username', '$email', '$password')");
+				$data['msg'] = "The user has now been created.";
+			}
 			
-			$userdata = $this->CI->db->query("SELECT * FROM `users` WHERE `username` = '$username'");
-			$row = $userdata->row_array();
+			if($login === TRUE)
+			{
+				$data['msg'] = "The user has been created, you have now been logged in.";
+				
+				$userdata = $this->CI->db->query("SELECT * FROM `users` WHERE `username` = '$username'");
+				$row = $userdata->row_array();
 			
-			$data = array(
+				$data = array(
 						'username' => $username,
 						'user_id' => $row['id'],
 						'group' => $row['group_id'],
 						'logged_in' => TRUE
 						);
-			$this->CI->session->set_userdata($data);
+				$this->CI->session->set_userdata($data);
 			
-			if($this->config['auth_remember'] === TRUE)
-			{
-				$this->_generate();
+				if($this->config['auth_remember'] === TRUE)
+				{
+					$this->_generate();
+				}
 			}
 			
-			$this->CI->load->view('auth/reg_success');
+			$this->view('reg_success', $data);
 		}
 	} // function register()
 	
@@ -343,6 +375,23 @@ class Auth
 		{
 			$this->_generate();
 		}
+	}
+	
+	/** 
+	* Load an auth specific view
+	*
+	* @access private
+	* @param string
+	*/
+	function view($page, $params = NULL)
+	{
+		if($params !== NULL)
+		{
+			$data['data'] = $params;
+		}
+		
+		$data['page'] = $page;
+		$this->CI->load->view('auth/index', $data);
 	}
 } // class Auth
 
