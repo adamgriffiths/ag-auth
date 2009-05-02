@@ -227,7 +227,7 @@ class Auth
 			
 			if($login === TRUE)
 			{
-				$data['msg'] = "The user has been created, you have now been logged in.";
+				$data2['msg'] = "The user has been created, you have now been logged in.";
 				
 				$userdata = $this->CI->db->query("SELECT * FROM `users` WHERE `username` = '$username'");
 				$row = $userdata->row_array();
@@ -246,7 +246,7 @@ class Auth
 				}
 			}
 			
-			$this->view('reg_success', $data);
+			$this->view('reg_success', $data2);
 		}
 	} // function register()
 	
