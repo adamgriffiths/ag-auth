@@ -17,9 +17,12 @@
 			<input type="password" name="conf_password" size="50" class="form" value="<?php echo set_value('conf_password'); ?>" /><?php echo form_error('conf_password'); ?><br /><br />
 			<?php } ?>
 			Email:<br />
+			<?php if(empty($username)){ ?>
+				<input type="text" name="email" size="50" class="form" value="<?php echo set_value('email'); ?>" /><?php echo form_error('email'); ?><br /><br />
+			<?php }else{ ?>
 			<input type="text" name="email" size="50" class="form" value="<?php echo set_value('email', $email); ?>" /><?php echo form_error('email'); ?><br /><br />
 			
-			<?php if(empty($username)) { ?>
+			<?php } if(empty($username)) { ?>
 			<input type="submit" value="Register" name="register" />
 			<?php } else { ?>
 			<input type="submit" value="Update" name="register" />
