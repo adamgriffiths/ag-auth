@@ -142,7 +142,7 @@ class Auth
 						$auth_type => $username,
 						'username' => $row['username'],
 						'user_id' => $row['id'],
-						'group_id' => $row['group_id'],
+						'group' => $row['group_id'],
 						'logged_in' => TRUE
 						);
 			$this->CI->session->set_userdata($data);
@@ -217,12 +217,12 @@ class Auth
 			if($edit === TRUE)
 			{
 				$this->CI->db->query("UPDATE `users` SET `email` = '$email' WHERE `id` = '$id'");
-				$data['msg'] = "The user has now been edited.";
+				$data2['msg'] = "The user has now been edited.";
 			}
 			else
 			{
 				$this->CI->db->query("INSERT INTO `users` (username, email, password) VALUES ('$username', '$email', '$password')");
-				$data['msg'] = "The user has now been created.";
+				$data2['msg'] = "The user has now been created.";
 			}
 			
 			if($login === TRUE)
