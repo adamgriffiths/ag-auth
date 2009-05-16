@@ -142,7 +142,7 @@ class Auth
 						$auth_type => $username,
 						'username' => $row['username'],
 						'user_id' => $row['id'],
-						'group' => $row['group_id'],
+						'group_id' => $row['group_id'],
 						'logged_in' => TRUE
 						);
 			$this->CI->session->set_userdata($data);

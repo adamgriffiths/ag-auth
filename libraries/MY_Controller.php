@@ -12,6 +12,8 @@
 * Auth provides a powerful, lightweight and simple interface for user authentication 
 */
 
+
+
 class Application extends Controller 
 {
 
