@@ -23,7 +23,7 @@ function user_group($group)
 	
 	$system_group = $CI->auth->config['auth_groups'][$group];
 	
-	if($system_group === $CI->session->userdata('group_id'))
+	if($system_group === $CI->session->userdata('group'))
 	{
 		return TRUE;
 	}
