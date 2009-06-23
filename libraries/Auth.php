@@ -140,7 +140,7 @@ class Auth
 				show_error($this->CI->lang->line('login_details_error'));
 			}
 
-			$userdata = $this->CI->db->query("SELECT * FROM `users` WHERE `$auth_type` = '$username'");
+			$userdata = $this->CI->db->query("SELECT * FROM `$this->user_table` WHERE `$auth_type` = '$username'");
 			$row = $userdata->row_array();
 			
 			$data = array(
@@ -202,7 +202,7 @@ class Auth
 		{
 			if($edit === TRUE)
 			{
-				$query = $this->CI->db->query("SELECT * FROM `users` WHERE `id` = '$id'");
+				$query = $this->CI->db->query("SELECT * FROM `$this->user_table` WHERE `id` = '$id'");
 				$result = $query->result_array();
 				
 				$this->view('register', $result[0]);
@@ -221,12 +221,12 @@ class Auth
 			
 			if($edit === TRUE)
 			{
-				$this->CI->db->query("UPDATE `users` SET `email` = '$email' WHERE `id` = '$id'");
+				$this->CI->db->query("UPDATE `$this->user_table` SET `email` = '$email' WHERE `id` = '$id'");
 				$data2['msg'] = "The user has now been edited.";
 			}
 			else
 			{
-				$this->CI->db->query("INSERT INTO `users` (username, email, password) VALUES ('$username', '$email', '$password')");
+				$this->CI->db->query("INSERT INTO `$this->user_table` (username, email, password) VALUES ('$username', '$email', '$password')");
 				$data2['msg'] = "The user has now been created.";
 			}
 			
@@ -316,7 +316,7 @@ class Auth
 	*/
 	function _verify_details($auth_type, $username, $password)
 	{
-		$query = $this->CI->db->query("SELECT * FROM `users` WHERE `$auth_type` = '$username' AND `password` = '$password'");
+		$query = $this->CI->db->query("SELECT * FROM `$this->user_table` WHERE `$auth_type` = '$username' AND `password` = '$password'");
 		
 		if($query->num_rows != 1)
 		{
@@ -382,7 +382,7 @@ class Auth
 		if((array_key_exists('login_attempts', $_COOKIE)) && ($_COOKIE['login_attempts'] >= 5))
 		{
 			$username = $this->CI->session->userdata('username');
-			$userdata = $this->CI->db->query("SELECT * FROM `users` WHERE `username` = '$username'");
+			$userdata = $this->CI->db->query("SELECT * FROM `$this->user_table` WHERE `username` = '$username'");
 			
 			$result = $userdata->row();
 
