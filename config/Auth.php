@@ -5,8 +5,8 @@
 * @package Authentication
 * @category Libraries
 * @author Adam Griffiths
-* @link http://programmersvoice.com
-* @version 1.0.4
+* @link http://adamgriffiths.co.uk
+* @version 1.0.6
 * @copyright Adam Griffiths 2009
 *
 * Auth provides a powerful, lightweight and simple interface for user authentication 
