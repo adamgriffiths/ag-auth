@@ -7,7 +7,7 @@ class Users extends Application
 	{
 		parent::Application();
 		$this->auth->restrict('admin'); // restrict this controller to admins only
-		$this->load->model('admin/User_model', 'users'); // Load the user model - gets lists of users etc
+		$this->load->model($this->models."usermodel", 'users'); // Load the user model - gets lists of users etc
 	}
 	
 	function manage()
@@ -37,8 +37,6 @@ class Users extends Application
 	
 	function edit($id)
 	{
-		//$this->users->edit($id);
-		
 		$this->auth->register(FALSE, TRUE, $id);
 	}
 }

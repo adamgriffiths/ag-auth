@@ -17,14 +17,17 @@
 class Application extends Controller 
 {
 
+	var $controllers; // These all track root folders for views, models, controllers; specified in Auth config
+	var $models;
+	var $views;
+	
 	function Application()
 	{
 		parent::Controller();
-		$this->load->library('auth');
+		$this->load->library(array('auth', 'table'));
 		$this->load->database();
-		$this->load->helper('auth');
-		$this->load->helper('url');
-		$this->load->library('table');
+		$this->load->helper(array('auth', 'url'));
+		$this->config->load('auth');
 		
 		$tmpl = array (
 		                    'table_open'          => '<table border="0" cellpadding="4" cellspacing="0">',
@@ -48,6 +51,10 @@ class Application extends Controller
 		              );
 
 		$this->table->set_template($tmpl);
+
+		$this->controllers = $this->config->item('auth_controllers_root');
+		$this->models = $this->config->item('auth_models_root');
+		$this->views = $this->config->item('auth_views_root');
 	}
 
 	function login()
@@ -64,7 +71,7 @@ class Application extends Controller
 	{
 		$this->auth->register();
 	}
-
+	
 	function username_check($str)
 	{
 		

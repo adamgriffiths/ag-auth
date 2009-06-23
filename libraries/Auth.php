@@ -18,6 +18,8 @@ class Auth
 	
 	var $CI; // The CI object
 	var $config; // The config items
+	var $user_table; // The user table (prefix + config)
+	var $group_table; // The group table (prefix + config)
 	
 	/** 
 	* Auth constructor
@@ -36,6 +38,9 @@ class Auth
 		$this->CI->load->library('session');
 		
 		$this->CI->lang->load('auth', 'english');
+		
+		$this->user_table = $this->CI->db->dbprefix($this->config['auth_user_table']);
+		$this->group_table = $this->CI->db->dbprefix($this->config['auth_group_table']);
 		
 		if($this->logged_in())
 		{
@@ -76,7 +81,7 @@ class Auth
 		elseif($this->logged_in() == TRUE)
 		{
 			$level = $this->config['auth_groups'][$group];
-			$user_level = $this->CI->session->userdata('group');
+			$user_level = $this->CI->session->userdata('group_id');
 			
 			if($user_level > $level OR $single == TRUE && $user_level !== $level)
 			{
@@ -235,7 +240,7 @@ class Auth
 				$data = array(
 						'username' => $username,
 						'user_id' => $row['id'],
-						'group' => $row['group_id'],
+						'group_id' => $row['group_id'],
 						'logged_in' => TRUE
 						);
 				$this->CI->session->set_userdata($data);
@@ -249,7 +254,7 @@ class Auth
 			$this->view('reg_success', $data2);
 		}
 	} // function register()
-	
+
 	
 	/** 
 	* Check to see if a user is logged in
@@ -325,25 +330,45 @@ class Auth
 	
 	
 	/** 
-	* Generate a new token/identifier from random.org
-	*
-	* @access private
-	* @param string
-	*/
-	function _generate()
-	{
-		$username = $this->CI->session->userdata('username');
-		
-		$token_source = fopen("http://random.org/strings/?num=1&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new", "r");
-		$token = fread($token_source, 20);
-		
-		$identifier = $username . $token;
-		$identifier = $this->_salt($identifier);
-		
-		$this->CI->db->query("UPDATE `users` SET `identifier` = '$identifier', `token` = '$token' WHERE `username` = '$username'");
-		
-		setcookie("logged_in", $identifier, time()+3600, '/');
-	}
+	  * Generate a new token/identifier from random.org
+	  *
+	  * @access private
+	  * @param string
+	  */
+	  function _generate()
+	  {
+	    $username = $this->CI->session->userdata('username');
+
+	    $rand_url = 'http://random.org/strings/?num=1&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new';
+
+	    if (ini_get('allow_url_fopen')) {
+	      // Grab the random string using the easy version if we can
+	      $token_source = fopen($rand_url, "r");
+	      $token = fread($token_source, 20);
+	    } elseif (function_exists('curl_version')) {
+	      // No easy version, so try cURL
+	      $ch = curl_init();
+	      curl_setopt($ch, CURLOPT_URL, $rand_url);
+	      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	      $token = curl_exec($ch);
+	      curl_close($ch);
+	    } else {
+	      // No love either way, generate a random string ourselves
+	      $length = 20;
+	        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	        $token = ”;    
+	        for ($i = 0; $i < $length; $i++) {
+	            $token .= $characters[mt_rand(0, strlen($characters)-1)];
+	        }
+	    }
+
+	    $identifier = $username . $token;
+	    $identifier = $this->_salt($identifier);
+
+	    $this->CI->db->query("UPDATE `$this->user_table` SET `identifier` = '$identifier', `token` = '$token' WHERE `username` = '$username'");
+
+	    setcookie("logged_in", $identifier, time()+3600, '/');
+	  }
 	
 	
 	/** 
@@ -391,7 +416,7 @@ class Auth
 		}
 		
 		$data['page'] = $page;
-		$this->CI->load->view('auth/index', $data);
+		$this->CI->load->view($this->config['auth_views_root'].'index', $data);
 	}
 } // class Auth
 

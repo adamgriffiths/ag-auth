@@ -40,7 +40,7 @@
 		</div>
 	
 		<div id="nav_bg">
-			<?php $this->load->view('auth/nav'); ?>
+			<?php $this->load->view($this->config->item('auth_views_root') . 'nav'); ?>
 		</div>
 		
 		<div id="container">
