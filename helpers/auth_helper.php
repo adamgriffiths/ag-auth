@@ -29,4 +29,18 @@ function user_group($group)
 	}
 }
 
+function user_table()
+{
+	$CI =& get_instance();
+	
+	return $CI->auth->user_table;
+}
+
+function group_table()
+{
+	$CI =& get_instance();
+	
+	return $CI->auth->group_table;
+}
+
 ?>

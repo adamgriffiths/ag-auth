@@ -10,13 +10,15 @@ class Usermodel extends Model
 
 	function users()
 	{
-		$query = $this->db->query("SELECT * FROM `users` ORDER BY `id` ASC");
+		$user_table = user_table();
+		$query = $this->db->query("SELECT * FROM `$user_table` ORDER BY `id` ASC");
 		return $query->result_array();
 	}
 	
 	function delete($id)
 	{
-		$this->db->query("DELETE FROM `users` WHERE `id` = '$id'");
+		$user_table = user_table();
+		$this->db->query("DELETE FROM `$user_table` WHERE `id` = '$id'");
 	}
 	
 	function edit($id)
