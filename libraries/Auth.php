@@ -92,7 +92,7 @@ class Auth
 		}
 		else
 		{
-			redirect($this->config['auth_login'], 'refresh');
+			redirect($this->config['auth_incorrect_login'], 'refresh');
 		}
 	} // function restrict()
 	
@@ -138,6 +138,8 @@ class Auth
 			if(!$this->_verify_details($auth_type, $username, $password))
 			{
 				show_error($this->CI->lang->line('login_details_error'));
+				$redirect = $this->config['auth_incorrect_login'];
+				redirect($redirect);
 			}
 
 			$userdata = $this->CI->db->query("SELECT * FROM `$this->user_table` WHERE `$auth_type` = '$username'");
