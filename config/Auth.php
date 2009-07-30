@@ -12,6 +12,7 @@
 * Auth provides a powerful, lightweight and simple interface for user authentication 
 */
 
+
 /**
 * The array which holds your user groups and their ID.
 * If you have a database table for groups, these ID's must be the same as in the database.
@@ -25,7 +26,7 @@ $config['auth_groups'] = array(
 /**
 * The default URI string to redirect to after a successful login.
 */
-$config['auth_login'] = 'admin/dashboard/';
+$config['auth_login'] = 'login/';
 
 
 /**
