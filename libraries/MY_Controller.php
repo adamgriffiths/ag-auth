@@ -77,7 +77,8 @@ class Application extends Controller
 		
 		$auth_type = $this->auth->_auth_type($str);
 		
-		$query = $this->db->query("SELECT * FROM `users` WHERE `$auth_type` = '$str'");
+		$user_table = user_table();
+		$query = $this->db->query("SELECT * FROM `$user_table` WHERE `$auth_type` = '$str'");
 		
 		if($query->num_rows === 1)
 		{
@@ -93,7 +94,8 @@ class Application extends Controller
 	
 	function reg_username_check($str)
 	{
-		$query = $this->db->query("SELECT * FROM `users` WHERE `username` = '$str'");
+		$user_table = user_table();
+		$query = $this->db->query("SELECT * FROM `$user_table` WHERE `username` = '$str'");
 		
 		if($query->num_rows <> 0)
 		{
@@ -109,7 +111,8 @@ class Application extends Controller
 	
 	function reg_email_check($str)
 	{	
-		$query = $this->db->query("SELECT * FROM `users` WHERE `email` = '$str'");
+		$user_table = user_table();
+		$query = $this->db->query("SELECT * FROM `$user_table` WHERE `email` = '$str'");
 		
 		if($query->num_rows <> 1)
 		{
