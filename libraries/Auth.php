@@ -236,7 +236,7 @@ class Auth
 			{
 				$data2['msg'] = "The user has been created, you have now been logged in.";
 				
-				$userdata = $this->CI->db->query("SELECT * FROM `users` WHERE `username` = '$username'");
+				$userdata = $this->CI->db->query("SELECT * FROM `$this->user_table` WHERE `username` = '$username'");
 				$row = $userdata->row_array();
 			
 				$data = array(
