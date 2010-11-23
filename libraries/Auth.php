@@ -169,10 +169,15 @@ class Auth
 	*
 	* @access public
 	*/
-	function logout()
+	function logout($redirect = NULL)
 	{
+		if($redirect === NULL)
+		{
+			$redirect = $this->config['auth_logout'];
+		}
+
 		$this->CI->session->sess_destroy();
-		$this->view('logout');
+		redirect($redirect);
 	} // function logout()
 	
 	
