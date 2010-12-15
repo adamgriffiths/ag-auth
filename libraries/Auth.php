@@ -337,7 +337,7 @@ class Auth
 	
 	
 	/** 
-	  * Generate a new token/identifier from random.org
+	  * Generate a new token/identifier
 	  *
 	  * @access private
 	  * @param string
@@ -346,28 +346,13 @@ class Auth
 	  {
 	    $username = $this->CI->session->userdata('username');
 
-	    $rand_url = 'http://random.org/strings/?num=1&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new';
-
-	    if (ini_get('allow_url_fopen')) {
-	      // Grab the random string using the easy version if we can
-	      $token_source = fopen($rand_url, "r");
-	      $token = fread($token_source, 20);
-	    } elseif (function_exists('curl_version')) {
-	      // No easy version, so try cURL
-	      $ch = curl_init();
-	      curl_setopt($ch, CURLOPT_URL, $rand_url);
-	      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	      $token = curl_exec($ch);
-	      curl_close($ch);
-	    } else {
-	      // No love either way, generate a random string ourselves
-	      $length = 20;
-	        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	        $token = ”;    
-	        for ($i = 0; $i < $length; $i++) {
-	            $token .= $characters[mt_rand(0, strlen($characters)-1)];
-	        }
-	    }
+        // Generate a random string ourselves
+        $length = 20;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $token = ”;    
+        for ($i = 0; $i < $length; $i++) {
+            $token .= $characters[mt_rand(0, strlen($characters)-1)];
+        }
 
 	    $identifier = $username . $token;
 	    $identifier = $this->_salt($identifier);
