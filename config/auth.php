@@ -29,6 +29,11 @@ $config['auth_groups'] = array(
 $config['auth_login'] = 'admin/dashboard';
 
 /**
+* The default URI string to redirect to after a successful logout.
+*/
+$config['auth_logout'] = 'login';
+
+/**
 * The URI string to redirect to when a user entered incorrect login details or is not authenticated
 */
 $config['auth_incorrect_login'] = 'login';
