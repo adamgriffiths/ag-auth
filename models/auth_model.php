@@ -23,7 +23,7 @@ class Auth_model extends CI_Model
 
 		log_message('debug', 'Auth Model Loaded');
 		
-		$this->config->load('ag_auth');
+		$this->config->load('auth');
 		$this->load->database();
 
 		$this->user_table = $this->config->item('auth_user_table');
