@@ -28,7 +28,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/fonts/fonts-min.css" />
 		
-		<title>The Authentication Library Admin Panel</title>
+		<title>The Authentication Library Control Panel</title>
 	
 	</head>
 	<body>
