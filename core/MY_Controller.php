@@ -56,24 +56,24 @@ class Application extends CI_Controller
 
 		if($this->form_validation->run() == FALSE)
 		{
-			$this->auth->view('register');
+			$this->ag_auth->view('register');
 		}
 		else
 		{
 			$username = set_value('username');
-			$password = $this->auth->salt(set_value('password'));
+			$password = $this->ag_auth->salt(set_value('password'));
 			$email = set_value('email');
 
-			if($this->auth->register($username, $password, $email) === TRUE)
+			if($this->ag_auth->register($username, $password, $email) === TRUE)
 			{
 				$data['message'] = "The user account has now been created.";
-				$this->auth->view('message', $data);
+				$this->ag_auth->view('message', $data);
 				
-			} // if($this->auth->register($username, $password, $email) === TRUE)
+			} // if($this->ag_auth->register($username, $password, $email) === TRUE)
 			else
 			{
 				$data['message'] = "The user account has not been created.";
-				$this->auth->view('message', $data);
+				$this->ag_auth->view('message', $data);
 			}
 			
 			echo('7');
@@ -87,7 +87,7 @@ class Application extends CI_Controller
 		
 		if($redirect === NULL)
 		{
-			$redirect = $this->auth->config['auth_login'];
+			$redirect = $this->ag_auth->config['auth_login'];
 		}
 		
 		$this->form_validation->set_rules('username', 'Username', 'required|min_length[6]');
@@ -95,15 +95,15 @@ class Application extends CI_Controller
 		
 		if($this->form_validation->run() == FALSE)
 		{
-			$this->auth->view('login');
+			$this->ag_auth->view('login');
 		}
 		else
 		{
 			$username = set_value('username');
-			$password = $this->auth->salt(set_value('password'));
+			$password = $this->ag_auth->salt(set_value('password'));
 			$field_type  = (valid_email($username)  ? 'email' : 'username');
 			
-			$user_data = $this->auth->get_user($username, $field_type);
+			$user_data = $this->ag_auth->get_user($username, $field_type);
 			
 			
 			if($user_data['password'] === $password)
@@ -112,7 +112,7 @@ class Application extends CI_Controller
 				unset($user_data['password']);
 				unset($user_data['id']);
 
-				$this->auth->login_user($user_data);
+				$this->ag_auth->login_user($user_data);
 				
 				redirect($redirect);
 				
@@ -121,7 +121,7 @@ class Application extends CI_Controller
 			else
 			{
 				$data['message'] = "The username and password did not match.";
-				$this->auth->view('message', $data);
+				$this->ag_auth->view('message', $data);
 			}
 		} // if($this->form_validation->run() == FALSE)
 		
