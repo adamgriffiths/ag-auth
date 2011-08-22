@@ -1,0 +1,14 @@
+# This is the spark-sdk specification. It's in a magical format called YAML.
+#  Use this format while developing your own sparks!
+
+# This is the spark name. This should be the registered name of the spark.
+# It is here for informational purposes only.
+name: auth
+
+# This is the current version of this spark. All sparks should be in
+#  x.x.x format. Validation will fail otherwise.
+version: 2.0.2
+
+# This is the version of CodeIgniter this spark is compatible up to. It should
+#  be in x.x.x format
+compatibility: 2.0.3
