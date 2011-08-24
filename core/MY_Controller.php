@@ -6,7 +6,7 @@
 * @category Libraries
 * @author Adam Griffiths
 * @link http://adamgriffiths.co.uk
-* @version 2.0.0
+* @version 2.0.3
 * @copyright Adam Griffiths 2010
 *
 * Auth provides a powerful, lightweight and simple interface for user authentication .
@@ -14,24 +14,23 @@
 
 class Application extends CI_Controller
 {
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		
 		log_message('debug', 'Application Loaded');
 
-		$this->load->library('form_validation');
-		$this->load->library('auth');
-		$this->load->helper(array('url', 'auth'));
+		$this->load->library(array('form_validation', 'ag_auth'));
+		$this->load->helper(array('url', 'ag_auth'));
 		
-		$this->config->load('auth');
+		$this->config->load('ag_auth');
 	}
 	
-	function field_exists($value)
+	public function field_exists($value)
 	{
 		$field_name  = (valid_email($value)  ? 'email' : 'username');
 		
-		$query = $this->db->get_where('users', array($field_name => $value));
+		$query = $this->db->get_where($this->config->item('auth_user_table'), array($field_name => $value));
 		
 		if($query->num_rows() <> 0)
 		{
@@ -45,9 +44,9 @@ class Application extends CI_Controller
 			
 		} // if($this->field_exists($value) === TRUE)
 		
-	} // function field_exists($value)
+	} // public function field_exists($value)
 	
-	function register()
+	public function register()
 	{
 		$this->form_validation->set_rules('username', 'Username', 'required|min_length[6]|callback_field_exists');
 		$this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|matches[password_conf]');
@@ -79,10 +78,10 @@ class Application extends CI_Controller
 			echo('7');
 		} // if($this->form_validation->run() == FALSE)
 		
-	} // function register()
+	} // public function register()
 	
 	
-	function login($redirect = NULL)
+	public function login($redirect = NULL)
 	{
 		
 		if($redirect === NULL)

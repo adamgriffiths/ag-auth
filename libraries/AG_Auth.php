@@ -6,7 +6,7 @@
 * @category Libraries
 * @author Adam Griffiths
 * @link http://adamgriffiths.co.uk
-* @version 2.0.0
+* @version 2.0.3
 * @copyright Adam Griffiths 2010
 *
 * Auth provides a powerful, lightweight and simple interface for user authentication .
@@ -24,10 +24,10 @@ class AG_Auth
 	* @author Adam Griffiths
 	* @param array
 	*
-	* The constructor function loads the libraries dependancies and creates the 
+	* The constructor public function loads the libraries dependancies and creates the 
 	* login attempts cookie if it does not already exist.
 	*/
-	function __construct($config)
+	public function __construct($config)
 	{
 		log_message('debug', 'Auth Library Loaded');
 
@@ -93,7 +93,7 @@ class AG_Auth
 		{
 			redirect($this->config['auth_incorrect_login'], 'refresh');
 		}
-	} // function restrict()
+	} // public function restrict()
 	
 	
 	/**
@@ -192,40 +192,28 @@ class AG_Auth
 	* @access private
 	* @param string
 	*/
-	private function _generate()
+	private  function _generate()
 	{
-	  $username = $this->CI->session->userdata('username');
+		$username = $this->CI->session->userdata('username');
+	
+		// No love either way, generate a random string ourselves
+		$length = 20;
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$token = "";    
+		
+		for ($i = 0; $i < $length; $i++)
+		{
+			$token .= $characters[mt_rand(0, strlen($characters)-1)];
+		}
+	
+		$identifier = $username . $token;
+		$identifier = $this->_salt($identifier);
 
-	  $rand_url = 'http://random.org/strings/?num=1&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new';
+		$this->CI->db->query("UPDATE `$this->user_table` SET `identifier` = '$identifier', `token` = '$token' WHERE `username` = '$username'");
 
-	  if (ini_get('allow_url_fopen')) {
-	    // Grab the random string using the easy version if we can
-	    $token_source = fopen($rand_url, "r");
-	    $token = fread($token_source, 20);
-	  } elseif (function_exists('curl_version')) {
-	    // No easy version, so try cURL
-	    $ch = curl_init();
-	    curl_setopt($ch, CURLOPT_URL, $rand_url);
-	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	    $token = curl_exec($ch);
-	    curl_close($ch);
-	  } else {
-	    // No love either way, generate a random string ourselves
-	    $length = 20;
-	      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	      $token = ”;    
-	      for ($i = 0; $i < $length; $i++) {
-	          $token .= $characters[mt_rand(0, strlen($characters)-1)];
-	      }
-	  }
-
-	    $identifier = $username . $token;
-	    $identifier = $this->_salt($identifier);
-
-	    $this->CI->db->query("UPDATE `$this->user_table` SET `identifier` = '$identifier', `token` = '$token' WHERE `username` = '$username'");
-
-	    setcookie("logged_in", $identifier, time()+3600, '/');
-	  }
+		setcookie("logged_in", $identifier, time()+3600, '/');
+	  
+	}
 	
 	
 	/** 
@@ -266,7 +254,7 @@ class AG_Auth
 	* @access private
 	* @param string
 	*/
-	function view($page, $params = NULL)
+	public function view($page, $params = NULL)
 	{
 		if($params !== NULL)
 		{

@@ -6,7 +6,7 @@
 * @category Libraries
 * @author Adam Griffiths
 * @link http://adamgriffiths.co.uk
-* @version 2.0.0
+* @version 2.0.3
 * @copyright Adam Griffiths 2010
 *
 * Auth provides a powerful, lightweight and simple interface for user authentication .
@@ -17,7 +17,7 @@ class AG_Auth_model extends CI_Model
 	var $user_table; // The user table (prefix + config)
 	var $group_table; // The group table (prefix + config)
 	
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 
@@ -30,7 +30,7 @@ class AG_Auth_model extends CI_Model
 		$this->group_table = $this->config->item('auth_group_table');
 	}
 	
-	function login_check($username, $field_type)
+	public function login_check($username, $field_type)
 	{
 		$query = $this->db->get_where($this->user_table, array($field_type => $username));
 		$result = $query->row_array();
@@ -38,7 +38,7 @@ class AG_Auth_model extends CI_Model
 		return $result;
 	}
 	
-	function register($username, $password, $email)
+	public function register($username, $password, $email)
 	{
 		if($this->db->set('username', $username)->set('password', $password)->set('email', $email)->set('group', '100')->insert($this->user_table))
 		{
@@ -48,7 +48,7 @@ class AG_Auth_model extends CI_Model
 		return FALSE;
 	}
 	
-	function field_exists($value)
+	public function field_exists($value)
 	{
 		
 		$field_name = (valid_email($value)  ? 'email' : 'username');

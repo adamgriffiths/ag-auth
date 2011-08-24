@@ -3,7 +3,7 @@
 function logged_in()
 {
 	$CI =& get_instance();
-	if($CI->auth->logged_in() == TRUE)
+	if($CI->ag_auth->logged_in() == TRUE)
 	{
 		return TRUE;
 	}
@@ -21,7 +21,7 @@ function user_group($group)
 {
 	$CI =& get_instance();
 	
-	$system_group = $CI->auth->config['auth_groups'][$group];
+	$system_group = $CI->ag_auth->config['auth_groups'][$group];
 	
 	if($system_group === $CI->session->userdata('group_id'))
 	{
@@ -33,14 +33,14 @@ function user_table()
 {
 	$CI =& get_instance();
 	
-	return $CI->auth->user_table;
+	return $CI->ag_auth->user_table;
 }
 
 function group_table()
 {
 	$CI =& get_instance();
 	
-	return $CI->auth->group_table;
+	return $CI->ag_auth->group_table;
 }
 
 ?>

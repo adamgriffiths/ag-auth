@@ -3,14 +3,14 @@
 class Users extends Application
 {
 	
-	function Users()
+	public function __construct()
 	{
-		parent::Application();
-		$this->auth->restrict('admin'); // restrict this controller to admins only
+		parent::__construct();
+		$this->ag_auth->restrict('admin'); // restrict this controller to admins only
 		$this->load->model($this->models."usermodel", 'users'); // Load the user model - gets lists of users etc
 	}
 	
-	function manage()
+	public function manage()
 	{
 		$data = $this->users->users(); // Grab an array of users from the database
 		$this->table->set_heading('Username', 'Email', 'Actions'); // Setting headings for the table
@@ -21,23 +21,23 @@ class Users extends Application
 			$this->table->add_row($key['username'], $key['email'], $actions); // Adding row to table
 		}
 		
-		$this->auth->view('users/manage'); // Load the view
+		$this->ag_auth->view('users/manage'); // Load the view
 	}
 	
-	function delete($id)
+	public function delete($id)
 	{
 		$this->users->delete($id);
-		$this->auth->view('users/delete_success');
+		$this->ag_auth->view('users/delete_success');
 	}
 	
-	function add()
+	public function add()
 	{
-		$this->auth->register(FALSE);
+		$this->ag_auth->register(FALSE);
 	}
 	
-	function edit($id)
+	public function edit($id)
 	{
-		$this->auth->register(FALSE, TRUE, $id);
+		$this->ag_auth->register(FALSE, TRUE, $id);
 	}
 }
 
