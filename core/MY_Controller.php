@@ -7,7 +7,7 @@
 * @author Adam Griffiths
 * @link http://adamgriffiths.co.uk
 * @version 2.0.3
-* @copyright Adam Griffiths 2010
+* @copyright Adam Griffiths 2011
 *
 * Auth provides a powerful, lightweight and simple interface for user authentication .
 */
