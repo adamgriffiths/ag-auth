@@ -22,7 +22,7 @@ class Application extends CI_Controller
 
 		$this->load->library('form_validation');
 		$this->load->library('auth');
-		$this->load->helper('url');
+		$this->load->helper(array('url', 'auth'));
 		
 		$this->config->load('auth');
 	}
@@ -127,11 +127,6 @@ class Application extends CI_Controller
 		
 	} // login()
 	
-	function logout()
-	{
-		$this->session->sess_destroy();
-		redirect($this->config->item('auth_logout'));
-	}
 }
 
 /* End of file: MY_Controller.php */

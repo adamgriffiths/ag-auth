@@ -64,7 +64,7 @@ class AG_Auth
 	* @param string
 	* @return bool
 	*/
-	function restrict($group = NULL, $single = NULL)
+	public function restrict($group = NULL, $single = NULL)
 	{
 		if($group === NULL)
 		{
@@ -102,7 +102,7 @@ class AG_Auth
 	*
 	* Checks the session data as to whether or not a user is logged in.
 	*/
-	function logged_in()
+	public function logged_in()
 	{
 		if($this->CI->session->userdata('logged_in') === TRUE)
 		{
@@ -122,7 +122,7 @@ class AG_Auth
 	*
 	* Uses the encryption key set in application/config/config.php to salt the password passed.
 	*/
-	function salt($password)
+	public function salt($password)
 	{
 		return hash("haval256,5", $this->CI->config->item('encryption_key') . $password);
 	}
@@ -136,7 +136,7 @@ class AG_Auth
 	*
 	* Takes a username & optional username type (email/username) and returns the user data
 	*/
-	function get_user($username, $field_type = 'username')
+	public function get_user($username, $field_type = 'username')
 	{
 		$user = $this->CI->ag_auth_model->login_check($username, $field_type);
 
@@ -153,7 +153,7 @@ class AG_Auth
 	*
 	* Creates a new user account
 	*/
-	function register($username, $password, $email)
+	public function register($username, $password, $email)
 	{
 		return $this->CI->ag_auth_model->register($username, $password, $email);
 	}
@@ -165,11 +165,23 @@ class AG_Auth
 	*
 	* Takes the user array, adds the logged_in portion and sets the session data from that.
 	*/
-	function login_user($user)
+	public function login_user($user)
 	{
 		$user['logged_in'] = TRUE;
 		
 		$this->CI->session->set_userdata($user);
+	}
+	
+	
+	/** 
+	* Destroys the user session.
+	*
+	* @access public
+	*/
+	public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect($this->config->item('auth_logout'));
 	}
 	
 	
@@ -265,7 +277,6 @@ class AG_Auth
 		$this->CI->load->view($this->config['auth_views_root'].'index', $data);
 	}
 	
-
 }
 
 /* End of file: AG_Auth.php */
