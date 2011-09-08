@@ -11,7 +11,7 @@ class Users extends Application
 	
 	public function manage()
 	{
-		$data = $this->users->users(); // Grab an array of users from the database
+		$data = $this->db->get($this->ag_auth->config['auth_user_table']);
 		$this->table->set_heading('Username', 'Email', 'Actions'); // Setting headings for the table
 		
 		foreach($data as $value => $key)
