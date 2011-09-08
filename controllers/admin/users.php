@@ -7,7 +7,6 @@ class Users extends Application
 	{
 		parent::__construct();
 		$this->ag_auth->restrict('admin'); // restrict this controller to admins only
-		$this->load->model($this->models."usermodel", 'users'); // Load the user model - gets lists of users etc
 	}
 	
 	public function manage()
@@ -26,7 +25,7 @@ class Users extends Application
 	
 	public function delete($id)
 	{
-		$this->users->delete($id);
+		$this->db->where('id', $id)->delete($this->ag_auth->config['auth_user_table']);
 		$this->ag_auth->view('users/delete_success');
 	}
 	
