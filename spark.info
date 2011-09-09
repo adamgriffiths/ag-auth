@@ -11,4 +11,4 @@ version: 2.0.2
 
 # This is the version of CodeIgniter this spark is compatible up to. It should
 #  be in x.x.x format
-compatibility: 2.0.3
+compatibility: 2.0.4
