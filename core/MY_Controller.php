@@ -21,7 +21,7 @@ class Application extends CI_Controller
 		log_message('debug', 'Application Loaded');
 
 		$this->load->library(array('form_validation', 'ag_auth'));
-		$this->load->helper(array('url', 'ag_auth'));
+		$this->load->helper(array('url', 'email', 'ag_auth'));
 		
 		$this->config->load('ag_auth');
 	}
@@ -74,8 +74,7 @@ class Application extends CI_Controller
 				$data['message'] = "The user account has not been created.";
 				$this->ag_auth->view('message', $data);
 			}
-			
-			echo('7');
+
 		} // if($this->form_validation->run() == FALSE)
 		
 	} // public function register()

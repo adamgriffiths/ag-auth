@@ -14,7 +14,7 @@
 			Password:<br />
 			<input type="password" name="password" size="50" class="form" value="<?php echo set_value('password'); ?>" /><?php echo form_error('password'); ?><br /><br />
 			Password confirmation:<br />
-			<input type="password" name="conf_password" size="50" class="form" value="<?php echo set_value('conf_password'); ?>" /><?php echo form_error('conf_password'); ?><br /><br />
+			<input type="password" name="password_conf" size="50" class="form" value="<?php echo set_value('conf_password'); ?>" /><?php echo form_error('conf_password'); ?><br /><br />
 			<?php } ?>
 			Email:<br />
 			<?php if(empty($username)){ ?>
