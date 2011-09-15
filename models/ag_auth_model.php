@@ -40,7 +40,7 @@ class AG_Auth_model extends CI_Model
 	
 	public function register($username, $password, $email)
 	{
-		if($this->db->set('username', $username)->set('password', $password)->set('email', $email)->set('group', '100')->insert($this->user_table))
+		if($this->db->set('username', $username)->set('password', $password)->set('email', $email)->set('group_id', '100')->insert($this->user_table))
 		{
 			return TRUE;
 		}
