@@ -15,7 +15,7 @@ class Admin extends Application
 		}
 		else
 		{
-			$this->ag_auth->login();
+			$this->login();
 		}
 	}
 
