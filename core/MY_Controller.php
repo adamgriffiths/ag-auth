@@ -30,9 +30,9 @@ class Application extends CI_Controller
 	{
 		$field_name  = (valid_email($value)  ? 'email' : 'username');
 		
-		$query = $this->db->get_where($this->config->item('auth_user_table'), array($field_name => $value));
+		$user = $this->ag_auth->get_user($value, $field_name);
 		
-		if($query->num_rows() <> 0)
+		if(array_key_exists('id', $user))
 		{
 			$this->form_validation->set_message('field_exists', 'The ' . $field_name . ' provided already exists, please use another.');
 			
@@ -125,6 +125,10 @@ class Application extends CI_Controller
 		
 	} // login()
 	
+	public function logout()
+	{
+		$this->ag_auth->logout();
+	}
 }
 
 /* End of file: MY_Controller.php */

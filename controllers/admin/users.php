@@ -19,7 +19,7 @@ class Users extends Application
 		
 		foreach($result as $value => $key)
 		{
-			$actions = anchor("admin/users/edit/".$key['id']."/", "Edit") . anchor("admin/users/delete/".$key['id']."/", "Delete"); // Build actions links
+			$actions = anchor("admin/users/delete/".$key['id']."/", "Delete"); // Build actions links
 			$this->table->add_row($key['username'], $key['email'], $actions); // Adding row to table
 		}
 		
@@ -32,15 +32,7 @@ class Users extends Application
 		$this->ag_auth->view('users/delete_success');
 	}
 	
-	public function add()
-	{
-		$this->ag_auth->register(FALSE);
-	}
-	
-	public function edit($id)
-	{
-		$this->ag_auth->register(FALSE, TRUE, $id);
-	}
+	// WOKRING ON PROPER IMPLEMENTATION OF ADDING & EDITING USER ACCOUNTS
 }
 
 ?>

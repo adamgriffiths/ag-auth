@@ -181,8 +181,8 @@ class AG_Auth
 	*/
 	public function logout()
 	{
-		$this->session->sess_destroy();
-		redirect($this->config->item('auth_logout'));
+		$this->CI->session->sess_destroy();
+		redirect($this->CI->config->item('auth_logout'));
 	}
 	
 	
