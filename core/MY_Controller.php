@@ -104,7 +104,7 @@ class Application extends CI_Controller
 			$user_data = $this->ag_auth->get_user($username, $field_type);
 			
 			
-			if($user_data['password'] === $password)
+			if(array_key_exists('password', $user_data) AND $user_data['password'] === $password)
 			{
 				
 				unset($user_data['password']);
