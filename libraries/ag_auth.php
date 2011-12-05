@@ -81,7 +81,7 @@ class AG_Auth
 		elseif($this->logged_in() == TRUE)
 		{
 			$level = $this->config['auth_groups'][$group];
-			$user_level = $this->CI->session->userdata('group');
+			$user_level = $this->CI->session->userdata('group_id');
 			
 			if($user_level > $level OR $single == TRUE && $user_level !== $level)
 			{
