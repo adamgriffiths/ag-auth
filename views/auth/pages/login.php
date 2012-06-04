@@ -2,7 +2,7 @@
 	
 	<h2>Login</h2>
 	<div class="box">
-			<form method="POST">
+			<?php echo form_open(); ?>
 			Username/Email:<br />
 			<input type="text" name="username" value="<?php echo set_value('username'); ?>" size="50" class="form" /><?php echo form_error('username'); ?><br /><br />
 			Password:<br />

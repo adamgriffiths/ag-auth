@@ -7,7 +7,7 @@
 	<?php } ?>
 	
 	<div class="box">
-			<form method="post">
+			<?php echo form_open(); ?>
 			<?php if(empty($username)) { ?>
 			Username:<br />
 			<input type="text" name="username" size="50" class="form" value="<?php echo set_value('username'); ?>" /><br /><?php echo form_error('username'); ?><br />
